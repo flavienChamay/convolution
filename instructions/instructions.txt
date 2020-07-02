@@ -1,0 +1,99 @@
+Travaux pratiques
+
+2.1 Objectif
+Il s’agit de programmer en langage C ANSI des opérateurs de traitement d’images vus en cours-TD. Chaque opérateur correspond à une fonction dont vous devez écrire le corps en utilisant les outils fournis.
+
+2.2 Évaluation
+La note de contrôle continu de la partie « bases du traitement et de l’analyse d’images » sera obtenue lors d’une épreuve écrite dont la date sera fixée ultérieurement.
+
+2.3 Outils fournis
+Les programmes et les images fournis sont rassemblés dans l’archive ci-dessous :
+Cette archive contient :
+
+    Bibliothèque LIMaCE : elle fournit des outils pour manipuler des images au format PNM (PBM, PGM et PPM) et des matrices d’entiers de type int ou de flottants de type double.
+        limace.pdf : documentation
+        limace.h : fichier d’en-têtes
+        limace.c : fichier source
+    Bibliothèque Erreurs : elle fournit des fonctions pour l’affichage de messages d’erreurs et de l’usage des opérateurs
+        erreurs.h : fichier d’en-têtes
+        erreurs.c : fichier source
+    Bibliothèque TAI : ce sont les corps des fonctions de cette bibliothèque que vous devez écrire
+        tai.h : fichier d’en-têtes
+        tai.c : fichier source à compléter
+    Fichiers contenant les fonctions principales (main) des opérateurs : binarisation.c, comparaison.c, dilatation.c, erosion.c, etalement.c, inversion.c, median.c, moyen.c
+    Fichier de description des dépendances : Makefile
+        make : commande permettant de lancer la compilation de l’ensemble du projet
+        make clean : commande permettant d’effacer tous les fichiers objets et tous les fichiers exécutables
+    Images pour tester les opérateurs : 
+        chenille.pbm, chenille.pgm, chenille.ppm, coins-gau.pgm, coins-imp.pgm, im-bin.pbm, rice.pgm, vaisseaux.pgm : images à utiliser en entrée des opérateurs
+        chenille-inv.pbm, chenille-inv.pgm, chenille-inv.ppm, coins-gau-moy3.pgm, coins-imp-med3.pgm, coins-imp-moy3.pgm, im-bin-dil-c3.pbm, im-bin-ero-c3.pbm, rice-bin118.pbm, rice-ero-d7.pbm, rice-ouv-d7.pbm, vaisseaux-eta.pgm : images de référence permettant de vérifier le bon fonctionnement des opérateurs
+    Matrices pour tester les opérateurs de morphologie mathématique binaire : carre3x3.mx, disque7x7.mx
+
+
+2.4 Travail à réaliser
+Après avoir décompressé l’archive, lancez la production des exécutables correspondant aux opérateurs de traitement d’images grâce à la commande make (des Warnings concernant les paramètres inutilisés s’afficheront tant que vous n’aurez pas programmé tous les opérateurs).
+Pour connaître la syntaxe d’appel de chaque opérateur, lancez l’exécutable correspondant avec l’option -h.
+Pour chaque opérateur, dans le fichier tai.c, écrivez le corps de la fonction correspondante à la place de l’appel à la macro AFAIRE().
+Testez chaque opérateur sur les images indiquées. Afin de vérifier le résultat, en plus de l’affichage de l’image obtenue, comparez-la avec l’image de référence fournie (voir la section 2.6 pour les détails) en utilisant l’opérateur comparaison (cet opérateur étant déjà programmé, vous pouvez l’utiliser directement).
+
+2.5 Principales fonctions utiles
+
+    ImAlloc et ImCAlloc : créer une nouvelle image
+    ImType : type d’une image (BitMap, GrayLevel ou Color) 
+    ImGetR : accéder à la composante rouge des pixels d'une image couleur (type Color)
+    ImGetG : accéder à la composante verte des pixels d'une image couleur (type Color)
+    ImGetB : accéder à la composante bleue des pixels d'une image couleur (type Color)
+    ImGetI : accéder aux niveaux de gris d'une image en niveaux de gris ou noir et blanc (types GrayLevel et BitMap)
+    ImNbRow : nombre de lignes d'une image
+    ImNbCol : nombre de colonnes d'une image
+    MatGetInt : accéder aux éléments d'une matrice de int 
+    MatNbRow : nombre de lignes d'une matrice
+    MatNbCol : nombre de colonnes d'une matrice
+
+La description de ces fonctions, ainsi que d’autres, se trouve dans le fichier limace.pdf. Le fichier d’en-têtes limace.h contient également des commentaires utiles.
+
+2.6 Opérateurs à programmer
+
+2.6.1 Inversion (obtention du négatif) d’une image noir et blanc (binaire), en niveaux de gris ou en couleur
+Écrivez la fonction Inversion en appliquant un traitement différent selon le type de l’image.
+Testez l’exécutable inversion sur les images chenille.pbm, chenille.pgm et chenille.ppm.
+Vérifiez vos résultats avec l’opérateur comparaison sur les images de référence correspondantes chenille-inv.pbm, chenille-inv.pgm et chenille-inv.ppm.
+
+2.6.2 Étalement de la dynamique d'une image de niveaux de gris
+Écrivez la fonction Etalement.
+Testez l’exécutable etalement sur l’image vaisseaux.pgm.
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence vaisseaux-eta.pgm.
+
+Attention : en C, l’expression a/b vaut le quotient de la division entière de a par b si a et b sont deux entiers (familles des char ou des int). Dans ce cas, passer cette expression à la fonction round n’a aucun effet sur la valeur. Pour que a/b soit le résultat de la division réelle de a par b, il faut qu’au moins l’un des deux opérandes soit un représentant des réels (float, double ou long double).
+Par exemple, round(11/4) vaut 2.0 alors que round(11.0/4) vaut 3.0.
+
+2.6.3 Binarisation d'une image de niveaux de gris par seuillage global
+Écrivez la fonction Binarisation. Pour chaque pixel, le résultat est 0 si son niveau de gris est strictement inférieur au seuil, 1 sinon.
+Testez l’exécutable binarisation sur l’image rice.pgm avec le seuil 118.
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence rice-bin118.pbm.
+
+2.6.4 Filtrage moyen d'une image de niveaux de gris
+Écrivez la fonction Moyen. Pour les bords, recopiez les niveaux de gris de l’image en entrée. 
+Testez l’exécutable moyen sur l’image coins-gau.pgm (à laquelle a été ajouté du bruit gaussien) avec le voisinage 3x3.
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence coins-gau-moy3.pgm.
+Testez l’exécutable moyen sur l’image coins-imp.pgm (à laquelle a été ajouté du bruit impulsionnel) avec le voisinage 3x3.
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence coins-imp-moy3.pgm.
+
+2.6.5 Filtrage médian d'une image de niveaux de gris
+Écrivez la fonction Median. Pour les bords, recopiez les niveaux de gris de l’image en entrée. Pour déterminer la médiane des niveaux de gris du voisinage, vous pouvez, dans un premier temps, utiliser la fonction standard sort. Mais, dans un second temps, trouvez un algorithme qui passe par le calcul de l’histogramme de ces niveaux de gris. 
+Testez l’exécutable median sur l’image coins-imp.pgm (à laquelle a été ajouté du bruit impulsionnel) avec le voisinage 3x3.
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence coins-imp-med3.pgm.
+
+2.6.6 Érosion d'une image binaire
+Écrivez la fonction Erosion. L’élément structurant est représenté par une Matrix de Int contenant uniquement des 0 et des 1 et dont les nombres de lignes et de colonnes sont impairs. Son origine est son centre. La validité de la matrice en argument de l’opérateur est vérifiée dans la fonction main par l’appel à la fonction InvalideES qui est déjà programmée dans le fichier tai.c. Attention, les pixels du bord de l’image doivent être traités en ne considérant que la partie de l’élément structurant qui se trouve à l’intérieur de l’image. Cette manière de traiter les pixels du bord nécessite une gestion fine des indices des boucles.  
+Testez l’exécutable erosion sur l’image im-bin.pbm avec l’élément structurant carre3x3.mx (les fichiers au format Matrix sont du texte lisible avec un éditeur ou avec la commande cat).
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence im-bin-ero-c3.pbm.
+
+Attention : il ne faut pas confondre l’érosion et la transformation « tout ou rien ». Pour vérifier que vous n’avez pas fait la confusion, appliquez l’érosion à l’image im-bin.pbm avec l’élément structurant croix3x3.mx suivant :
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence im-bin-ero-croix3.pbm suivante :
+
+2.6.7 Dilatation d'une image binaire
+Écrivez la fonction Dilatation. Cet opérateur doit fonctionner comme le précédent, mais il réalise une dilatation.
+Testez l’exécutable dilatation sur l’image im-bin.pbm avec l’élément structurant carre3x3.mx.
+Vérifiez votre résultat avec l’opérateur comparaison sur l’image de référence im-bin-dil-c3.pbm.
+Appliquez l’ouverture sur l’image rice-bin118.pbm avec l’élément structurant disque7x7.mx. Les images de référence sont, pour l’érosion, rice-ero-d7.pbm et pour  l’ouverture, rice-ouv-d7.pbm.
