@@ -1,5 +1,6 @@
 # convolution
 Implementation of a convolution using LIMACE for images in .pgm and .ppm
+From the Paul Sabatier University
 
 WARNINGS:
 The instructions (on the "instructions" file, in the folder "instrucitons") and the documentation for LIMACE are in french.
